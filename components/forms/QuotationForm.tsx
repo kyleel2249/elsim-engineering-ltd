@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 
 interface FormState {
   name: string;
+  clientType: string;
   company: string;
   email: string;
   telephone: string;
@@ -26,6 +27,7 @@ interface FormState {
 
 const initialState: FormState = {
   name: '',
+  clientType: '',
   company: '',
   email: '',
   telephone: '',
@@ -46,7 +48,7 @@ const STEPS = [
 ] as const;
 
 const STEP_FIELDS: Record<number, (keyof FormState)[]> = {
-  1: ['name', 'email', 'telephone'],
+  1: ['name', 'clientType', 'email', 'telephone'],
   2: ['serviceRequired', 'projectLocation', 'projectDescription'],
   3: ['consent'],
 };
@@ -124,7 +126,8 @@ export function QuotationForm() {
       'ELSIM Engineering — project enquiry',
       '',
       `Name: ${form.name}`,
-      `Company: ${form.company || '—'}`,
+      `Client type: ${form.clientType || '—'}`,
+      `Company / organisation: ${form.clientType === 'Individual' ? 'N/A (individual)' : form.company || '—'}`,
       `Email: ${form.email}`,
       `Telephone: ${form.telephone}`,
       `Service required: ${form.serviceRequired}`,
@@ -285,17 +288,37 @@ export function QuotationForm() {
                   style={fieldStyle(Boolean(errors.name))}
                 />
               </Field>
-              <Field id="company" label="Company / organisation" error={errors.company}>
-                <input
-                  id="company"
-                  name="company"
-                  autoComplete="organization"
-                  value={form.company}
-                  onChange={(e) => update('company', e.target.value)}
+              <Field id="clientType" label="I am enquiring as" required error={errors.clientType}>
+                <select
+                  id="clientType"
+                  name="clientType"
+                  value={form.clientType}
+                  onChange={(e) => {
+                    update('clientType', e.target.value);
+                    if (e.target.value === 'Individual') update('company', '');
+                  }}
                   className={inputClass}
-                  style={fieldStyle(Boolean(errors.company))}
-                />
+                  style={fieldStyle(Boolean(errors.clientType))}
+                >
+                  <option value="">Select…</option>
+                  <option value="Individual">Individual</option>
+                  <option value="Company / organisation">Company / organisation</option>
+                </select>
               </Field>
+              {form.clientType === 'Company / organisation' && (
+                <Field id="company" label="Company / organisation name" error={errors.company}>
+                  <input
+                    id="company"
+                    name="company"
+                    autoComplete="organization"
+                    value={form.company}
+                    onChange={(e) => update('company', e.target.value)}
+                    className={inputClass}
+                    style={fieldStyle(Boolean(errors.company))}
+                    placeholder="Company or organisation name"
+                  />
+                </Field>
+              )}
               <Field id="email" label="Email" required error={errors.email}>
                 <input
                   id="email"

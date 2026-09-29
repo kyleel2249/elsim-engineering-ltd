@@ -94,6 +94,7 @@ export async function POST(request: Request) {
       receivedAt: new Date().toISOString(),
       inbox: quotationInbox || '(unset)',
       name: parsed.data.name,
+      clientType: parsed.data.clientType,
       company: parsed.data.company || null,
       email: parsed.data.email,
       telephone: parsed.data.telephone,

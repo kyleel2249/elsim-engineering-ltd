@@ -8,6 +8,9 @@ import { z } from 'zod';
  */
 export const quotationSchema = z.object({
   name: z.string().trim().min(2, 'Enter your full name').max(120),
+  clientType: z.enum(['Individual', 'Company / organisation'], {
+    errorMap: () => ({ message: 'Select whether you are an individual or a company / organisation' }),
+  }),
   company: z.string().trim().max(160).optional().or(z.literal('')),
   email: z.string().trim().email('Enter a valid email address').max(200),
   telephone: z
