@@ -40,10 +40,8 @@ export const GA_MEASUREMENT_ID =
 export const isStaticExport = process.env.NEXT_PUBLIC_STATIC_EXPORT === '1';
 
 /**
- * Where quotation submissions are emailed.
+ * Where quotation submissions are emailed / shown as the public contact address.
  * Override with QUOTATION_INBOX in the host environment if needed.
- * Mail to support@elsimengineeringlimited.com should be forwarded at the domain
- * provider to elsimengineering@gmail.com.
  */
 export const quotationInbox =
-  process.env.QUOTATION_INBOX ?? 'support@elsimengineeringlimited.com';
+  process.env.QUOTATION_INBOX ?? 'elsimengineering@gmail.com';
